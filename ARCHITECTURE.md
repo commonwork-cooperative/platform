@@ -1,0 +1,71 @@
+# Architecture
+
+This document is honest about what is decided, what is not, and why.
+
+I am writing it before any production code exists because the decisions made now are harder to undo than the code written later. If you disagree with something here, say so. The architecture decisions are still being made and early contributors have real influence over them.
+
+---
+
+## The economic constraint that shapes everything
+
+Workers keep 92% of every transaction on CW Freelance. That is not a marketing number. It is a governance constraint encoded in the bylaws. The platform fee is 8%, allocated as follows: 4% operations, 2% mutual aid fund, 1% legal defense reserve, 1% CommonWork Open University.
+
+Every architectural decision has to be evaluated against this constraint. A technology choice that increases operational costs enough to compress worker earnings below the 92% threshold is the wrong choice, regardless of what else it offers.
+
+---
+
+## What is decided
+
+**CommonCoin runs on Algorand.**
+
+The reasons: proof-of-stake (near-zero energy footprint), $0.001 transaction fees (predictable, not variable), 4-second settlement (fast enough for real-time platform transactions), US-regulated (we need regulatory clarity before any public token activity), and the Algorand Standard Asset framework handles the internal accounting unit use case cleanly.
+
+Phase 1 of CommonCoin is a closed-loop internal accounting unit. No exchange listing. No public trading. No speculation. It exists to eliminate payment processor dependency for transactions between cooperative members. Any transition beyond Phase 1 requires a two-thirds Worker Assembly vote and legal review. That constraint is in the bylaws, not just the README.
+
+**Credentials on-chain.**
+
+CommonWork Open University completion is verified by token on Algorand. This means a member's education record is permanent, portable, and not dependent on any platform staying operational. The credential belongs to the member, not the cooperative.
+
+**Federated governance architecture.**
+
+The cooperative is designed to scale to millions of members through a federated structure: City Cooperatives, Regional Federations, Global Stewardship Trust. The technical architecture needs to support governance at this scale eventually. It does not need to implement it in Phase 1. But decisions made in Phase 1 that make federation harder later are decisions worth avoiding now.
+
+---
+
+## What is not decided
+
+**The stack for CW Freelance MVP.**
+
+I have opinions but not strong ones. The constraint is: fast to build, easy for cooperative contributors to understand and maintain, and capable of handling the payment processing and worker-matching logic that the MVP needs. What the MVP does not need: scale infrastructure, mobile apps, or anything that a single engineer cannot build and maintain.
+
+Open question: what stack would you choose if you were building a freelance marketplace for 1,000 users with a two-person team and a cooperative ownership constraint?
+
+**Smart contract scope for Phase 1.**
+
+How much of the governance logic lives on-chain versus off-chain in Phase 1? The purity argument says: put governance on-chain so it cannot be manipulated. The pragmatism argument says: on-chain governance at early stage adds complexity that slows everything down and the cooperative's bylaws provide legal enforcement of the same guarantees. I lean toward pragmatism for Phase 1 with a clear migration path toward on-chain governance as the member base grows. Disagree with me here if you have a better argument.
+
+**Payment processing for fiat in Phase 1.**
+
+Stripe is integrated for founding membership fees. For the actual platform transactions in Phase 1, before CommonCoin is ready for peer-to-peer use, the options are Stripe Connect, a cooperative-aligned processor, or something else entirely. This decision has significant implications for the 8% fee structure and for the cooperative's financial sovereignty. It needs more thinking than I have given it.
+
+**Data architecture for the Worker Assembly.**
+
+One member, one vote. Members vote asynchronously on strategic decisions with a 30-day ratification window. The voting record needs to be auditable, tamper-evident, and accessible to all members. On-chain is the obvious answer. Whether that is worth the complexity in Phase 1 is the question.
+
+---
+
+## What the MVP needs to do
+
+CW Freelance Phase 1 needs to do exactly these things and nothing else:
+
+A worker can create a profile and list services. A client can find workers and hire them. Payment flows through the platform. 92% reaches the worker. 8% reaches the cooperative's account. Both parties can rate each other. The cooperative has an admin view of transactions for financial reporting.
+
+That is it. No mobile app. No AI matching. No CommonCoin. No Worker Assembly integration. Those come after the economic model is proven with real transactions.
+
+---
+
+## What I want to know from you
+
+What did I get wrong here? What have I not thought about? What decision looks obvious to you that I have marked as undecided?
+
+Open an issue. Or email admin@commonwork.coop.
